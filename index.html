@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>חידון: מבנה האטום והטבלה המחזורית</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f8;--card:#fff;--ink:#14213d;--mute:#5b6b85;--line:#d3dce8;--acc:#0b7a99;--accb:#e2f3f8;--ok:#1b7f4c;--okb:#dff4e7;--bad:#c2410c;--badb:#fde8dd;--grid:#dbe5f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1526;--card:#16213a;--ink:#e8eefb;--mute:#93a3c2;--line:#2b3a5c;--acc:#4fc3e0;--accb:#12324a;--ok:#5fd596;--okb:#123a2a;--bad:#ff9a66;--badb:#3d2418;--grid:#18253f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1526;--card:#16213a;--ink:#e8eefb;--mute:#93a3c2;--line:#2b3a5c;--acc:#4fc3e0;--accb:#12324a;--ok:#5fd596;--okb:#123a2a;--bad:#ff9a66;--badb:#3d2418;--grid:#18253f;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;color:var(--ink);font-family:Heebo,Arial,sans-serif;line-height:1.55}
+main{max-width:680px;margin:0 auto;padding:20px 16px 40px}
+h1{font-family:'Secular One',Heebo,sans-serif;font-weight:400;font-size:clamp(26px,6vw,38px);margin:8px 0 6px;line-height:1.2}
+.sub{color:var(--mute);margin:0 0 20px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:22px 20px}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ring{position:relative;width:64px;height:64px;flex:none}
+.ring svg{width:64px;height:64px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:5}
+.ring .t{stroke:var(--line)}.ring .p{stroke:var(--acc);stroke-linecap:round;transition:stroke-dashoffset .4s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:17px}
+.sec{font-weight:800;font-size:15px;color:var(--acc)}.cnt{color:var(--mute);font-size:13px}
+.q{font-size:clamp(18px,4.6vw,22px);font-weight:600;margin:6px 0 18px}
+.opts{display:grid;gap:10px}
+.o{font:inherit;text-align:right;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;cursor:pointer;display:flex;gap:12px;align-items:center;transition:background .15s,border-color .15s}
+.o:hover:not(:disabled){border-color:var(--acc);background:var(--accb)}
+.o:focus-visible,.btn:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.o i{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:14px;font-weight:800}
+.o:disabled{cursor:default}
+.o.ok{background:var(--okb);border-color:var(--ok)}.o.ok i{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.o.no{background:var(--badb);border-color:var(--bad)}.o.no i{background:var(--bad);border-color:var(--bad);color:var(--card)}
+.fb{margin-top:16px;font-weight:600;min-height:26px}
+.btn{font:inherit;font-weight:800;background:var(--acc);color:var(--card);border:0;border-radius:12px;padding:12px 26px;cursor:pointer;margin-top:14px}
+.btn.alt{background:var(--accb);color:var(--acc)}
+.big{font-family:'Secular One',Heebo,sans-serif;font-size:64px;line-height:1;color:var(--acc);margin:8px 0}
+.rev{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.rev li{background:var(--badb);border-radius:10px;padding:10px 14px;font-size:15px}
+.rev b{color:var(--ok)}
+footer{margin-top:22px;text-align:center;color:var(--mute);font-size:14px}
+footer strong{color:var(--ink)}
+.hid{display:none}
+.ptw{overflow:hidden;margin:0 0 14px;border:1.5px solid var(--line);border-radius:12px;padding:8px;background:var(--bg)}
+.pt{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));grid-template-rows:repeat(7,auto) 8px auto auto;gap:1px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:4px;text-align:center;font-size:clamp(7px,2.3vw,12px);font-weight:600;line-height:1.15;padding:2px 0;overflow:hidden}
+.c small{display:block;font-size:clamp(5px,1.5vw,8px);font-weight:400;color:var(--mute)}
+.c.st{background:var(--accb);border-color:var(--acc);color:var(--acc);font-weight:800}
+.note{background:var(--accb);border-radius:10px;padding:10px 14px;margin:0 0 14px;font-weight:600;color:var(--acc)}
+.hd{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:1px;margin-bottom:3px;font-size:clamp(8px,2.3vw,12px);font-weight:800;color:var(--acc);text-align:center}
+.cap{color:var(--mute);font-size:13px;margin:-6px 0 14px}
+body{background:linear-gradient(160deg,#dbeafe,#f5d0fe 55%,#fed7aa) fixed}
+h1{background:linear-gradient(100deg,#4f46e5,#c026d3 55%,#ea580c);color:#fff;border-radius:20px;padding:18px 20px;margin:8px 0 12px;box-shadow:0 6px 0 rgba(79,70,229,.35)}
+.sub{font-weight:600}
+.card{border:2.5px solid var(--sc,var(--acc));box-shadow:0 7px 0 var(--sc,var(--acc));border-radius:22px}
+.sec{color:var(--sc,var(--acc))}
+.ring .p{stroke:var(--sc,var(--acc));stroke-width:6}
+.ring .t{stroke-width:6}
+.q{font-weight:800}
+.o{border-width:2px;border-radius:14px;padding:14px 16px;font-weight:600}
+.o i{background:var(--sc,var(--acc));border-color:var(--sc,var(--acc));color:#fff;width:30px;height:30px}
+.o:hover:not(:disabled){border-color:var(--sc,var(--acc))}
+.btn{background:var(--sc,var(--acc));color:#fff;border-radius:999px;padding:13px 32px;font-size:17px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.big{background:linear-gradient(100deg,#4f46e5,#db2777,#ea580c);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:84px}
+.c.st{background:#db2777;border-color:#db2777;color:#fff}
+.c.st small{color:#ffd6ea}
+.note{background:var(--sc,var(--acc));color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background:linear-gradient(160deg,#0f172a,#1e1b4b 55%,#3b0a3a) fixed}:root:not([data-theme="light"]) .sec{color:color-mix(in srgb,var(--sc,#4fc3e0) 55%,#fff)}}
+@media (max-width:480px){main{padding:12px 8px 32px}.card{padding:16px 10px}.ptw{padding:4px}.c{font-size:clamp(8px,2.5vw,12px)}.c small{font-size:clamp(6px,1.9vw,8px)}}
+</style>
+</head>
+<body>
+<main>
+<h1>⚛️ מבנה האטום והטבלה המחזורית</h1>
+<p class="sub">חידון של 54 שאלות. אחרי כל תשובה תקבלו משוב מיידי, ובסוף תראו ציון ותיקון טעויות.</p>
+<div class="card" id="app"></div>
+<footer>עריכה: <strong>מילכה ברקו גרש</strong><br>רוב השאלות לוקטו מתוך ערכת ה.ל.ה.: יסודות ותרכובות: מבנים, תכונות ותהליכים, חלקים א’ וב’. מרכז מורים ארצי למו״ט בחט״ב, משרד החינוך, מנהלת מל״ם.</footer>
+</main>
+<script>
+const MN=["מתכת","אל מתכת"],FAM=["מתכות אלקליות","הלוגנים","גזים אצילים"];
+const S=[["איפיון היסודות המתכתיים",0],["מתכות ואל מתכות בטבלה המחזורית",1],["מבנה האטום",7],["חידה: תעודת הזהות של היסוד שמספרו האטומי 8",26],["יונים",30],["סדר בטבלה המחזורית",37],["משפחות בטבלה המחזורית",41]];
+const Q=[
+["בחרו את התכונה המאפיינת את כל המתכות.",["מוליכות חשמלית גבוהה","מוליכות חשמלית נמוכה","כל המתכות במצב צבירה מוצק בטמפרטורת החדר","לא ניתנות לריקוע","לא מבריקות"],0],
+["הברום במצב צבירה נוזל בטמפרטורת החדר, צבעו חום והוא אינו מוליך זרם חשמלי. הברום הוא…",MN,1],
+["האבץ הוא יסוד בצבע אפור, ניתן לריקוע ומוליך חשמל. האבץ הוא…",MN,0],
+["גופרית S (מספר 16)",MN,1],["חנקן N (מספר 7)",MN,1],["אשלגן K (מספר 19)",MN,0],
+["מימן H (מספר 1), שימו לב: יוצא דופן.",MN,1],
+["במה שונים אטומי הנחושת מאטומי הגופרית?",["הפרוטונים שבגרעין הנחושת שונים מהפרוטונים שבגרעין הגופרית","באטום הנחושת הפרוטונים והאלקטרונים נמצאים בגרעין, ובאטום הגופרית מחוץ לגרעין","מספר הפרוטונים שבאטום הנחושת שונה ממספר הפרוטונים שבאטום הגופרית","באטום גופרית אין אלקטרונים, ואילו באטום הנחושת יש"],2],
+["התייחסו למבנה האטום של היסוד ארגון, שמספרו האטומי 18.",["יש בו 18 פרוטונים וגם 18 אלקטרונים","יש בו 18 פרוטונים ואין אלקטרונים","יש בו 18 אלקטרונים ואין פרוטונים","יש בו 18 פרוטונים ו־19 אלקטרונים"],0],
+["מה המטען של גרעין האטום?",["שלילי","חיובי","ניטרלי","חיובי או שלילי, תלוי ביסוד"],1],
+["פרוטון הוא…",["חלקיק חסר מטען חשמלי הנמצא רק באטומים של אל מתכות","חלקיק בעל מטען חשמלי חיובי שנמצא בכל אטום","חלקיק בעל מטען חשמלי שלילי שנמצא בכל אטום","חלקיק חסר מטען חשמלי הנמצא רק באטומים של מתכת"],1],
+["בין אלקטרון לפרוטון…",["קיים כוח דחייה חשמלי","קיים כוח משיכה חשמלי","יש כוח דחייה חשמלי וכוח משיכה חשמלי","אין כלל כוחות חשמליים"],1],
+["מי מהמשפטים הבאים מתאר נכון את מבנה האטום?",["האלקטרונים והפרוטונים נמצאים במרכז האטום והנויטרונים נעים סביבם","האלקטרונים והנויטרונים נמצאים במרכז האטום והפרוטונים נעים סביבם","הפרוטונים והנויטרונים נמצאים במרכז האטום והאלקטרונים נעים סביבם","הפרוטונים נמצאים במרכז האטום, והאלקטרונים והנויטרונים מפוזרים בו באופן אקראי"],2],
+["ממה בנוי גרעין האטום?",["מאלקטרונים ופרוטונים","מנויטרונים ופרוטונים","מנויטרונים בלבד","מפרוטונים, אלקטרונים ונויטרונים"],1],
+["בין אילו חלקיקים באטום קיימת דחייה חשמלית?",["בין אלקטרון לאלקטרון, ובין פרוטון לפרוטון","בין אלקטרון לפרוטון","בין נויטרון לאלקטרון","בין נויטרון לפרוטון"],0],
+["איזו תשובה מתארת נכון את הפרוטונים באטום?",["הפרוטונים נמצאים בגרעין האטום","הפרוטונים נמצאים מסביב לגרעין האטום בחוסר תנועה","הפרוטונים נעים מסביב לגרעין","הפרוטונים נעים מחוץ לגרעין האטום"],0],
+["במה שונה אטום של היסוד נחושת מאטום של היסוד ברזל?",["במבנה הבסיסי של האטום","במבנה הבסיסי של גרעין האטום","בסוג הפרוטונים שבגרעין האטום","במספר הפרוטונים שבגרעין"],3],
+["באטום ניטרלי של נחושת יש 29 אלקטרונים. כמה פרוטונים באטום זה?",["31","28","29","27"],2],
+["בעת יצירת קשרים כימיים, האטומים של המתכות נוטים…",["למסור פרוטונים","למסור אלקטרונים (״אלקטרונים חופשיים״)","לקבל נויטרונים","לקבל אלקטרונים"],1],
+["באילו אטומים יש אלקטרונים?",["רק באטומים של מתכות","רק באטומים של אל מתכות","רק באטומים של חומרים מוליכי חשמל","בכל סוגי האטומים"],3],
+["אטום ניטרלי מבחינה חשמלית פירושו ש…",["האטום בנוי מחלקיקים ניטרליים","האטום בנוי רק מנויטרונים שהם חסרי מטען חשמלי","מספר הפרוטונים באטום שווה למספר האלקטרונים","מספר הפרוטונים באטום שווה למספר הנויטרונים"],2],
+["המורה שאלה מה המשותף לאטומים של אותו יסוד. התלמיד ענה: ״בכל האטומים של אותו יסוד יש אותו מספר של פרוטונים״. האם תשובתו נכונה?",["כן","לא"],0],
+["כיצד ייתכן אטום ניטרלי מבחינה חשמלית, למרות שיש בו גם מטענים שליליים וגם חיוביים? בחרו את ההסבר הנכון.",["כאשר מספר החלקיקים בעלי המטען החיובי שווה למספר החלקיקים בעלי המטען השלילי, סך המטען של האטום ניטרלי","כי יש בו גם נויטרונים"],0],
+["המספר האטומי נקבע על פי…",["מספר האלקטרונים באטום","מספר הפרוטונים באטום","מספר הפרוטונים ומספר הנויטרונים","מספר הנויטרונים"],1],
+["האם יכולים להיות שני אטומים של יסודות שונים עם אותו מספר אטומי? (מספר אטומי = מספר הפרוטונים באטום)",["לא, המספר האטומי נקבע לפי מספר הפרוטונים בגרעין. לכל יסוד יש מספר פרוטונים שונה","כן, המספר האטומי מבטא כמה אטומים של היסוד יש בכלי, ומספר זה יכול להשתנות"],0],
+["האם יכולים להיות שני אטומים של אותו יסוד עם מספר מסה שונה? (מספר מסה = מספר הפרוטונים + הנויטרונים)",["כן, הם זהים במספר הפרוטונים אבל יכולים להיות שונים במספר הנויטרונים","לא, לכל האטומים מאותו יסוד יש אותו מספר פרוטונים ואותו מספר נויטרונים"],0],
+["שם היסוד שמספרו האטומי 8",["מימן","חמצן","פחמן","סידן"],1],
+["מספר הפרוטונים בגרעין היסוד שמספרו האטומי 8",["6","8","10","12"],1],
+["מספר האלקטרונים באטום ניטרלי של היסוד שמספרו האטומי 8",["6","8","10","12"],1],
+["היסוד שמספרו האטומי 8 שייך לקבוצת ה…",["מתכות","אל מתכות"],1],
+["בתגובה כימית היסוד שמספרו האטומי 8 נוטה להפוך ליון…",["חיובי","שלילי","מאטומים ניטרליים ליונים"],1],
+["מהו יון?",["אטום שבו מספר האלקטרונים גדול יותר או קטן יותר ממספר הפרוטונים","אטום שבו מספר האלקטרונים שווה למספר הפרוטונים"],0],
+["יון חיובי נוצר כאשר…",["נוספים אלקטרונים לאטום","האטום מאבד אלקטרון/ים","נוספים פרוטונים לאטום","האטום מאבד פרוטון/ים"],1],
+["סמנו את המשפט המתאר יון חיובי.",["חלקיק שבו מספר האלקטרונים שווה למספר הפרוטונים","חלקיק שבו מספר האלקטרונים גדול ממספר הפרוטונים","חלקיק שבו מספר האלקטרונים קטן ממספר הפרוטונים","חלקיק שבו מספר האלקטרונים שווה למספר הנויטרונים"],2],
+["אטום ניטרלי של כלור שנוסף לו אלקטרון…",["נטען במטען חשמלי חיובי","נשאר אטום ניטרלי","נטען במטען חשמלי שלילי","מטענו החשמלי שווה לאפס"],2],
+["מספר הפרוטונים ביון הברזל הוא 26 ומספר האלקטרונים 23. מהו מטענו של היון?",["+2","+1","−1","0","+3"],4],
+["המספר האטומי של הסידן הוא 20. מטענו של יון הסידן הוא 2+. מה נכון ליון הסידן?",["יש בו 22 פרוטונים","יש בו 22 אלקטרונים","יש בו 18 פרוטונים","יש בו 18 אלקטרונים"],3],
+["העובדה שהמימן הוא היסוד הראשון בטבלה המחזורית מלמדת אותנו ש…",["המימן הוא היסוד הפעיל ביותר","המימן הוא היסוד בעל המספר האטומי הקטן ביותר","המימן מופיע כמולקולה דו־אטומית","המימן הוא גז בטמפרטורת החדר"],1],
+["מה ניתן לומר על יסודות השייכים לאותה משפחה כימית?",["יש להם תכונות כימיות דומות","הם יכולים ליצור קשר רק בינם לבין עצמם","לכולם אותו מספר אלקטרונים באטומים","לכולם אותו מספר פרוטונים באטומים"],0],
+["היסודות בטבלה המחזורית מסודרים לפי…",["שמות היסודות בלועזית","הסדר שבו התגלו","מספר אטומי עולה","מספר אלקטרונים ברמה הגבוהה ביותר"],2],
+["צזיום, בסמל Cs, נמצא באזור השמאלי של הטבלה המחזורית. מה ניתן ללמוד מכך?",["צזיום הוא אל מתכת","צזיום מוליך חשמל","לצזיום אין ברק מתכתי","צזיום נמצא במצב צבירה גז בטמפרטורת החדר"],1],
+["יסודות הבנויים מאטומים בודדים ולא נוטים להתרכב בקלות.",FAM,2],
+["משפחה הכוללת בין השאר את היסודות אשלגן, נתרן וליתיום.",FAM,0],
+["כולם מצויים במצב צבירה גזי בטמפרטורת החדר.",FAM,2],
+["בעת מעבר זרם חשמלי דרכם נפלט אור בצבעים שונים, תלוי ביסוד.",FAM,2],
+["יוצרים תרכובות עם מתכות.",FAM,1],
+["יסודות המופיעים בטור הראשון (מצד שמאל) של טבלת היסודות.",FAM,0],
+["משפחה הכוללת בין השאר את היסודות הליום, ניאון וארגון.",FAM,2],
+["יסודות המופיעים בטור השביעי של טבלת היסודות.",FAM,1],
+["יסודות המוליכים זרם חשמלי.",FAM,0],
+["יסודות המופיעים בטור השמיני (הימני ביותר) של טבלת היסודות.",FAM,2],
+["יסודות שאינם נוטים ליצור תרכובות עם יסודות אחרים.",FAM,2],
+["יסודות מוצקים בטמפרטורת החדר.",FAM,0],
+["משפחה הכוללת את היסודות פלואור, כלור, יוד, ברום ואסטטין.",FAM,1]
+];
+const SY="H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og".split(" "),ST=new Set("B Si Ge As Sb Te Po At".split(" "));
+function pos(n){if(n==1)return[1,1];if(n==2)return[1,18];if(n<=4)return[2,n-2];if(n<=10)return[2,n+8];if(n<=12)return[3,n-10];if(n<=18)return[3,n];if(n<=36)return[4,n-18];if(n<=54)return[5,n-36];if(n<=56)return[6,n-54];if(n<=71)return[9,n-54];if(n<=86)return[6,n-68];if(n<=88)return[7,n-86];if(n<=103)return[10,n-86];return[7,n-100]}
+const TBL='<div class="ptw" dir="ltr"><div class="pt">'+SY.map((s,k)=>{const n=k+1,p=pos(n);return `<div class="c${ST.has(s)?" st":""}" style="grid-row:${p[0]};grid-column:${p[1]}"><small>${n}</small>${s}</div>`}).join("")+'</div></div><p class="cap">הטבלה המחזורית. היסודות הצבועים נמצאים על קו המדרגות: מתכות משמאל לקו, אל מתכות מימינו.</p>';
+const TBL2=TBL.replace('<div class="pt">','<div class="hd">'+[1,2,13,14,15,16,17,18].map((c,k)=>`<span style="grid-column:${c}">${k+1}</span>`).join("")+'</div><div class="pt">').replace('</p>',' המספרים מעל הטבלה הם מספרי הטורים (1–8).</p>');
+const L=["א","ב","ג","ד","ה"],A=document.getElementById("app"),C=2*Math.PI*28;
+let i=0,score=0,miss=[];
+function sec(n){let s=S[0][0];for(const x of S)if(n>=x[1])s=x[0];return s}
+function show(){
+ const q=Q[i],off=C*(1-i/Q.length);A.style.setProperty("--sc",["#0284c7","#7c3aed","#db2777","#d97706","#059669","#e11d48","#4f46e5"][S.findLastIndex(x=>i>=x[1])]);
+ A.innerHTML=`<div class="top"><div class="ring"><svg viewBox="0 0 64 64"><circle class="t" cx="32" cy="32" r="28"/><circle class="p" cx="32" cy="32" r="28" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg><b>${i+1}</b></div><div><div class="sec">${sec(i)}</div><div class="cnt">שאלה ${i+1} מתוך ${Q.length} · ציון נוכחי: ${score}</div></div></div>
+ <div class="q">${q[0]}</div>${i>=3&&i<=6?TBL:i>=26&&i<=30?'<p class="note">שימו לב ❤ כל השאלות ברצף 27–31 מתייחסות לאותו יסוד.</p>'+TBL:i==46||i==48||i==50?TBL2:""}<div class="opts">${q[1].map((o,k)=>`<button class="o" data-k="${k}"><i>${L[k]}</i><span>${o}</span></button>`).join("")}</div><div class="fb" aria-live="polite"></div><button class="btn hid" id="nx">${i<Q.length-1?"לשאלה הבאה":"לתוצאות"}</button>`;
+ A.querySelectorAll(".o").forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+ document.getElementById("nx").onclick=()=>{i++;i<Q.length?show():end()};
+}
+function pick(k){
+ const q=Q[i],bs=A.querySelectorAll(".o"),fb=A.querySelector(".fb");
+ bs.forEach((b,j)=>{b.disabled=true;if(j===q[2]){b.classList.add("ok");b.firstChild.textContent="✓"}});
+ if(k===q[2]){score++;fb.style.color="var(--ok)";fb.textContent="נכון, כל הכבוד!"}
+ else{bs[k].classList.add("no");bs[k].firstChild.textContent="✗";miss.push(i);fb.style.color="var(--bad)";fb.textContent="לא נכון. התשובה הנכונה מסומנת בירוק."}
+ const n=document.getElementById("nx");n.classList.remove("hid");n.focus();
+}
+function end(){
+ const p=Math.round(score/Q.length*100);
+ const msg=p>=90?"מצוין! שליטה מלאה בחומר.":p>=70?"יפה מאוד! עוד קצת תרגול ותגיעו למצוין.":p>=50?"התחלה טובה. כדאי לחזור על הטעויות.":"כדאי לחזור על החומר ולנסות שוב.";
+ A.innerHTML=`<div class="sec">סיום החידון</div><div class="big">${p}</div><div class="q">ענית נכון על ${score} מתוך ${Q.length} שאלות. ${msg}</div>
+ ${miss.length?`<div class="sec">תיקון הטעויות</div><ul class="rev">${miss.map(n=>`<li>${n+1}. ${Q[n][0]}<br><b>התשובה הנכונה: ${Q[n][1][Q[n][2]]}</b></li>`).join("")}</ul>`:""}
+ <button class="btn" id="rs">נסו שוב</button>`;
+ document.getElementById("rs").onclick=()=>{i=0;score=0;miss=[];show()};
+}
+show();
+</script>
+</body>
+</html>
